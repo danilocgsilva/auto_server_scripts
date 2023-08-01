@@ -2,6 +2,8 @@ import argparse
 import importlib
 import os
 import auto_server_scripts.scripts.php_composer as php_composer
+from auto_server_scripts.validate_args import validate_args
+from auto_server_scripts.exceptions.ArgumentsNotValid import ArgumentsNotValid
 
 def list_scripts():
     path = os.path.dirname(php_composer.__file__)
@@ -12,6 +14,18 @@ def list_scripts():
             modules_cleaned.append(module)
 
     return modules_cleaned
+
+def commandLineToClassConversor(command_line: str):
+    terms = command_line.split("_")
+    uppercasedTerms = []
+    for term in terms:
+        uppercasedTerms.append(term.capitalize())
+    
+    finalClassName = ""
+    for uppercasedTerm in uppercasedTerms:
+        finalClassName += uppercasedTerm
+    
+    return finalClassName
 
 def main():
     parser = argparse.ArgumentParser()
@@ -32,20 +46,26 @@ def main():
 
     args = parser.parse_args()
 
-    if args.type == None:
-        print("You must use --type to tell what script you will need.")
-    else:
-        try:
-            module = importlib.import_module(
-                "auto_server_scripts.scripts." + args.type
-            )
-
-            message = module.exec(args.docker)
-            print(message)
-        except ModuleNotFoundError as e:
-            print("There are no type like " + args.type)
-            scripts_files = list_scripts()
-            print("The available modules are:")
-            for module in list_scripts():
-                print(" * " + module)
+    try:
+        validate_args(args)
+        module = importlib.import_module(
+            "auto_server_scripts.scripts." + args.type
+        )
+        LoadedClass = getattr(module, commandLineToClassConversor(args.type))
+        instantiatedClass = LoadedClass()
+        
+        if args.docker:
+            instantiatedClass.setDocker(args.docker)
+        
+        print(
+            instantiatedClass.exec()
+        )
+    except ArgumentsNotValid as e:
+        print(str(e))
+    except ModuleNotFoundError as e:
+        print("There are no type like " + args.type)
+        scripts_files = list_scripts()
+        print("The available modules are:")
+        for module in list_scripts():
+            print(" * " + module)
     

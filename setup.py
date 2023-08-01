@@ -16,7 +16,11 @@ setup(
     url="https://github.com/danilocgsilva/auto_server_scripts",
     author="Danilo Silva",
     author_email="contact@danilocgsilva.me",
-    packages=["auto_server_scripts", "auto_server_scripts.scripts"],
+    packages=[
+        "auto_server_scripts", 
+        "auto_server_scripts.scripts",
+        "auto_server_scripts.exceptions"
+    ],
     entry_points={"console_scripts": ["aus=auto_server_scripts.__main__:main"],},
     include_package_data=True
 )
