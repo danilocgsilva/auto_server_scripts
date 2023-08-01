@@ -2,13 +2,17 @@ class ApacheNewVhost:
     
     def __init__(self):
         self.vhostName = None
-        self.documentRoot = None
+        self.documentRootSuffix = "public"
     
-    def setVhostName(self, vhostName):
+    def setVhostName(self, vhostName: str):
         self.vhostName = vhostName
-        self.documentRoot = "/var/www/html/" + vhostName + "/public"
+
+    def setDocumentRootSuffix(self, documentRootPrefix: str):
+        self.documentRootSuffix = documentRootPrefix
 
     def exec(self) -> str:
+
+        documentRoot = "/var/www/html/" + self.vhostName + "/" + self.documentRootSuffix
         
         base_string = '''<VirtualHost {0}:80>
         ServerName {0}
@@ -21,4 +25,4 @@ class ApacheNewVhost:
 </VirtualHost>
 '''
 
-        return base_string.format(self.vhostName, self.documentRoot, "${APACHE_LOG_DIR}")
+        return base_string.format(self.vhostName, documentRoot, "${APACHE_LOG_DIR}")
