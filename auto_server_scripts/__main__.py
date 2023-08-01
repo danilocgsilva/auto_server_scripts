@@ -15,6 +15,11 @@ def list_scripts():
 
     return modules_cleaned
 
+def generate_file(fileName: str, fileContent: str):
+    f = open(fileName, "w")
+    f.write(content)
+    f.close()
+
 def commandLineToClassConversor(command_line: str):
     terms = command_line.split("_")
     uppercasedTerms = []
@@ -41,7 +46,14 @@ def main():
         "--docker",
         "-d",
         required=False,
-        action='store_true'
+        action='store_true',
+        help="Prefixes the output with a RUN, with is suitable to a Dockerfile receipt."
+    )
+    parse.add_argument(
+        "--to_path",
+        "-p",
+        required=False,
+        help="Outputs to a file in the designated path."
     )
 
     args = parser.parse_args()
@@ -56,10 +68,13 @@ def main():
         
         if args.docker:
             instantiatedClass.setDocker(args.docker)
+            
+        content = instantiatedClass.exec()
+        if args.to_path:
+            generate_file(content)
+        else:
+            print(content)
         
-        print(
-            instantiatedClass.exec()
-        )
     except ArgumentsNotValid as e:
         print(str(e))
     except ModuleNotFoundError as e:
