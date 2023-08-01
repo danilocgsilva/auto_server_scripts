@@ -6,16 +6,7 @@
 pip install .
 ```
 
-## To run:
+## What can be done:
 
-```
-aus --type php_composer
-```
-This will write in the terminal the command required to install the composer (from PHP) in a debian-like webserver.
-
-You can type as well:
-```
-aus --type php_composer --docker
-```
-Then it will prefix the output with a `RUN`, so suitable to be written in a Dockerfile, so the composer can be installed in the container in the build time.
-
+* [Generate a command line that install the php composer in the server](docs/php_composer.md)
+* [Generate the content of a Apache virtual Host](docs/apache_new_vhost.md)

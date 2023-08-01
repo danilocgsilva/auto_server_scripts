@@ -15,9 +15,9 @@ def list_scripts():
 
     return modules_cleaned
 
-def generate_file(fileName: str, fileContent: str):
-    f = open(fileName, "w")
-    f.write(content)
+def generate_file(fullFilePath: str, fileContent: str):
+    f = open(fullFilePath, "w")
+    f.write(fileContent)
     f.close()
 
 def commandLineToClassConversor(command_line: str):
@@ -49,11 +49,24 @@ def main():
         action='store_true',
         help="Prefixes the output with a RUN, with is suitable to a Dockerfile receipt."
     )
-    parse.add_argument(
-        "--to_path",
-        "-p",
+    parser.add_argument(
+        "--generate-file",
+        "-f",
         required=False,
-        help="Outputs to a file in the designated path."
+        action='store_true',
+        help="Sinalizes that I want to generate a file."
+    )
+    parser.add_argument(
+        "--server-name",
+        "-s",
+        required=False,
+        help="Tells the name of the virtual host to be created for Apache."
+    )
+    parser.add_argument(
+        "--to-directory",
+        "-td",
+        required=False,
+        help="If the file generation is asked, put the file in the given folder."
     )
 
     args = parser.parse_args()
@@ -65,15 +78,21 @@ def main():
         )
         LoadedClass = getattr(module, commandLineToClassConversor(args.type))
         instantiatedClass = LoadedClass()
-        
         if args.docker:
             instantiatedClass.setDocker(args.docker)
-            
+        if args.server_name:
+            instantiatedClass.setVhostName(args.server_name)
         content = instantiatedClass.exec()
-        if args.to_path:
-            generate_file(content)
+        if args.generate_file:
+            full_file_path = args.server_name + ".conf"
+            if args.to_directory:
+                full_file_path = os.path.join(args.to_directory, full_file_path)
+            generate_file(full_file_path, content)
+            print("The file " + full_file_path + " has been generated.")
         else:
-            print(content)
+            print(
+                content
+            )
         
     except ArgumentsNotValid as e:
         print(str(e))

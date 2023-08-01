@@ -18,7 +18,6 @@ class ApacheNewVhost:
 
         ErrorLog {2}/error.log
         CustomLog {2}/access.log combined
-
 </VirtualHost>
 '''
 
