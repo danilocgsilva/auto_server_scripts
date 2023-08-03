@@ -68,6 +68,20 @@ def main():
         required=False,
         help="If the file generation is asked, put the file in the given folder."
     )
+    parser.add_argument(
+        "--dockerreceipt-inject",
+        "-di",
+        required=False,
+        action='store_true',
+        help="Alters a docker receipt (a folder with docker-compose.yml and Dockerfile) to build the environment with a Virtual Host"
+    )
+    parser.add_argument(
+        "--dockerreceipt-address",
+        "-da",
+        required=False,
+        help="When requiring to inject code in the docker content, it is required to provides this argument"
+        nargs='?'
+    )
 
     args = parser.parse_args()
 
@@ -82,6 +96,7 @@ def main():
             instantiatedClass.setDocker(args.docker)
         if args.server_name:
             instantiatedClass.setVhostName(args.server_name)
+
         content = instantiatedClass.exec()
         if args.generate_file:
             full_file_path = args.server_name + ".conf"
@@ -89,6 +104,8 @@ def main():
                 full_file_path = os.path.join(args.to_directory, full_file_path)
             generate_file(full_file_path, content)
             print("The file " + full_file_path + " has been generated.")
+        if args.dockerreceipt_inject:
+
         else:
             print(
                 content
