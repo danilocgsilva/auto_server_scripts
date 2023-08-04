@@ -1,4 +1,5 @@
 import unittest
+import os
 from auto_server_scripts.scripts.apache_new_vhost import ApacheNewVhost
 
 class test_apache_new_vhost(unittest.TestCase):
@@ -38,3 +39,16 @@ class test_apache_new_vhost(unittest.TestCase):
 '''
 
         self.assertEqual(expected_content, apache_new_vhost.exec())
+        
+    def test_exception_for_dockerreceipt_folder(self):
+        apache_new_vhost = ApacheNewVhost()
+        list_of_files = ["filea.txt", "fileb.txt", "filec.txt", ".", ".."]
+        with self.assertRaises(Exception):
+            apache_new_vhost.checkReceipt(list_of_files)
+            
+    def test_true_for_dockerreceipt_folder(self):
+        apache_new_vhost = ApacheNewVhost()
+        list_of_files = ["filea.txt", "fileb.txt", "filec.txt", ".", "..", "Dockerfile"]
+        self.assertTrue(apache_new_vhost.checkReceipt(list_of_files))
+            
+            

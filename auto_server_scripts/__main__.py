@@ -4,6 +4,7 @@ import auto_server_scripts.scripts.php_composer as php_composer
 from auto_server_scripts.validate_args import validate_args
 from auto_server_scripts.exceptions.ArgumentsNotValid import ArgumentsNotValid
 from auto_server_scripts.arguments_parser import arguments_parser
+from auto_server_scripts.FileOperations import FileOperations
 import sys
 
 def list_scripts():
@@ -16,10 +17,10 @@ def list_scripts():
 
     return modules_cleaned
 
-def generate_file(fullFilePath: str, fileContent: str):
-    f = open(fullFilePath, "w")
-    f.write(fileContent)
-    f.close()
+# def generate_file(fullFilePath: str, fileContent: str):
+#     f = open(fullFilePath, "w")
+#     f.write(fileContent)
+#     f.close()
 
 def commandLineToClassConversor(command_line: str):
     terms = command_line.split("_")
@@ -35,7 +36,7 @@ def commandLineToClassConversor(command_line: str):
 
 def main():
     
-    args = arguments_parser(sys.argv[1:])
+    args = arguments_parser()
 
     try:
         validate_args(args)
@@ -49,20 +50,23 @@ def main():
         if args.server_name:
             instantiatedClass.setVhostName(args.server_name)
 
-        content = instantiatedClass.exec()
+        virtualHostFileContent = instantiatedClass.exec()
+        file_name = args.server_name + ".conf"
+        fileOperations = FileOperations()
         if args.generate_file:
-            full_file_path = args.server_name + ".conf"
+            full_file_path = ""
             if args.to_directory:
-                full_file_path = os.path.join(args.to_directory, full_file_path)
-            generate_file(full_file_path, content)
+                full_file_path = os.path.join(args.to_directory, file_name)
+            fileOperations.generate_file(full_file_path, virtualHostFileContent)
             print("The file " + full_file_path + " has been generated.")
         if args.dockerreceipt_inject:
-            
+            instantiatedClass.injectInDockerReceipt(args, fileOperations, file_name)
         else:
-            print(
-                content
-            )
-        
+            print(virtualHostFileContent)
+            if not args.no_hint:
+                print("")
+                print("hint: you can use the --dockerreceipt-inject as a parameter to automatically injects a new virtual host configuration file in an existing docker receipt.")
+            
     except ArgumentsNotValid as e:
         print(str(e))
     except ModuleNotFoundError as e:

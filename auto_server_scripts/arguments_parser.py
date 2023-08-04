@@ -1,6 +1,6 @@
 import argparse
 
-def arguments_parser(args):
+def arguments_parser():
     
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -51,6 +51,13 @@ def arguments_parser(args):
         help="When requiring to inject code in the docker content, it is required to provides this argument",
         nargs='?'
     )
+    parser.add_argument(
+        "--no-hint",
+        "-n",
+        required=False,
+        help="Supress any further string data from output that is not related to the required content.",
+        action='store_true'
+    )
 
-    return parser.parse_args(args)
+    return parser.parse_args()
     
