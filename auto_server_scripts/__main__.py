@@ -60,7 +60,13 @@ def main():
             fileOperations.generate_file(full_file_path, virtualHostFileContent)
             print("The file " + full_file_path + " has been generated.")
         if args.dockerreceipt_inject:
-            instantiatedClass.injectInDockerReceipt(args, fileOperations, file_name)
+            files_from_command_line = os.listdir(args.dockerreceipt_address)
+            instantiatedClass.checkReceipt(files_from_command_line)
+            instantiatedClass.injectInDockerReceipt(
+                fileOperations, 
+                file_name,
+                args.dockerreceipt_address
+            )
         else:
             print(virtualHostFileContent)
             if not args.no_hint:

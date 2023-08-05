@@ -29,10 +29,12 @@ class ApacheNewVhost:
 
         return base_string.format(self.vhostName, documentRoot, "${APACHE_LOG_DIR}")
     
-    def injectInDockerReceipt(self, args, fileOperations, file_name):
-        path_provided_by_cli = args.dockerreceipt_address
-        files_from_command_line = os.listdir(path_provided_by_cli)
-        self._checkReceipt(files_from_command_line)
+    def injectInDockerReceipt(
+        self, 
+        fileOperations, 
+        file_name,
+        path_provided_by_cli
+    ):
         folder_to_write = os.path.join(path_provided_by_cli, "configure", "vhosts")
         if not os.path.exists(folder_to_write):
             os.makedirs(folder_to_write)
@@ -45,12 +47,10 @@ class ApacheNewVhost:
             line_content="COPY ./configure/vhosts/" + file_name + " /etc/apache2/sites-available/" + file_name
         )
     
-    def _checkReceipt(self, files_listed: list) -> bool:
+    def checkReceipt(self, files_listed: list) -> bool:
         if not self._doesHaveDockerFile(files_listed):
             raise Exception('The provided folder does not have a Dockerfile')
         return True
-    
-
         
     def _doesHaveDockerFile(self, files_listed: str) -> bool:
         validFolder = False
@@ -59,5 +59,3 @@ class ApacheNewVhost:
                 validFolder = True
         return validFolder
                 
-        
-        

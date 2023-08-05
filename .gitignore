@@ -1,4 +1,7 @@
-auto_server_scripts.egg-info
 build/lib
-auto_server_scripts/scripts/__pycache__
 tests/__pycache__
+auto_server_scripts/scripts/__pycache__
+auto_server_scripts/__main__.py
+auto_server_scripts.egg-info
+auto_server_scripts/__pycache__
+auto_server_scripts/exceptions/__pycache__
