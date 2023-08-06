@@ -16,6 +16,7 @@ class FileOperations:
         f = open(file_path, "r")
         fileContentList = f.readlines()
         f.close()
+        
         fileContentList.insert(inserting_line_number, line_content + "\n")
         modifiedFileString = "".join(fileContentList)
         fileToWrite = open(file_path, "w")
