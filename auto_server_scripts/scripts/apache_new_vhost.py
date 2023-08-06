@@ -33,17 +33,25 @@ class ApacheNewVhost:
         self, 
         fileOperations, 
         file_name,
-        path_provided_by_cli
+        path_provided_by_cli,
+        file_content
     ):
         folder_to_write = os.path.join(path_provided_by_cli, "configure", "vhosts")
         if not os.path.exists(folder_to_write):
             os.makedirs(folder_to_write)
         full_file_vhost_path = os.path.join(folder_to_write, file_name)
-        fileOperations.generate_file(full_file_vhost_path, full_file_vhost_path)
+        fileOperations.generate_file(
+            fullFilePath=full_file_vhost_path, 
+            fileContent=file_content
+        )
         print("Great! A new virtualhost configuration file has been created. Check the file in " + full_file_vhost_path + ".")
+        file_to_alter = os.path.join(path_provided_by_cli,"Dockerfile")
+        
+        inserting_line_number = fileOperations.getLastRunLine(file_to_alter)
+        
         fileOperations.insert_line_in_file(
-            file_path=os.path.join(path_provided_by_cli,"Dockerfile"),
-            inserting_line_number=3, 
+            file_path=file_to_alter,
+            inserting_line_number=inserting_line_number, 
             line_content="COPY ./configure/vhosts/" + file_name + " /etc/apache2/sites-available/" + file_name
         )
     

@@ -65,7 +65,8 @@ def main():
             instantiatedClass.injectInDockerReceipt(
                 fileOperations, 
                 file_name,
-                args.dockerreceipt_address
+                args.dockerreceipt_address,
+                virtualHostFileContent
             )
         else:
             print(virtualHostFileContent)
