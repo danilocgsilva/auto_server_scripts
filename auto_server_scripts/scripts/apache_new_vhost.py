@@ -60,6 +60,17 @@ class ApacheNewVhost:
             inserting_line_number=inserting_line_number + 1, 
             line_content="RUN a2ensite " + file_name + ".conf"
         )
+
+        fileOperations.insert_line_in_file(
+            file_path=file_to_alter,
+            inserting_line_number=inserting_line_number + 1, 
+            line_content="service apache2 reload"
+        )
+
+        fileOperations.append_to_file(
+            file_path="/etc/hosts",
+            line_content="127.0.0.1 " + file_name
+        )
     
     def checkReceipt(self, files_listed: list) -> bool:
         if not self._doesHaveDockerFile(files_listed):

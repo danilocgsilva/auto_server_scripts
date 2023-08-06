@@ -58,6 +58,13 @@ def arguments_parser():
         help="Supress any further string data from output that is not related to the required content.",
         action='store_true'
     )
+    parser.add_argument(
+        "--documentroot-suffix",
+        "--ds",
+        required=False,
+        help="If the document root is other pathn than the term -> public <-, you can choose here.",
+        nargs='?'
+    )
 
     return parser.parse_args()
     

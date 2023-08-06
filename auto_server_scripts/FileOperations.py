@@ -22,6 +22,11 @@ class FileOperations:
         fileToWrite = open(file_path, "w")
         fileToWrite.write(modifiedFileString)
         fileToWrite.close()
+
+    def append_to_file(self, file_path, line_content):
+        f = open(file_path, "a")
+        f.write(line_content)
+        f.close()
         
     def getLastRunLine(self, file_path: str) -> int:
         f = open(file_path, "r")

@@ -17,11 +17,6 @@ def list_scripts():
 
     return modules_cleaned
 
-# def generate_file(fullFilePath: str, fileContent: str):
-#     f = open(fullFilePath, "w")
-#     f.write(fileContent)
-#     f.close()
-
 def commandLineToClassConversor(command_line: str):
     terms = command_line.split("_")
     uppercasedTerms = []
@@ -50,6 +45,8 @@ def main():
         if args.server_name:
             instantiatedClass.setVhostName(args.server_name)
 
+        if args.documentroot_suffix:
+            instantiatedClass.setDocumentRootSuffix(args.documentroot_suffix)
         virtualHostFileContent = instantiatedClass.exec()
         file_name = args.server_name + ".conf"
         fileOperations = FileOperations()

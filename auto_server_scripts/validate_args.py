@@ -10,7 +10,8 @@ def validate_args(args) -> bool:
             raise ArgumentsNotValid(exceptionMessage)
         if args.dockerreceipt_inject:
             if not args.dockerreceipt_address:
-                exceptionMessage = "You have provided the dockerreceipt_inject parameter. In this case, the --dockerreceipt-address is required as well, and must have as a value the address from your docker recept."
+                exceptionMessage = "You have provided the dockerreceipt_inject parameter. In this case, the --dockerreceipt-address is required as well, and must have as a value the address from your docker recept.\n"
+                exceptionMessage += "You also may want to use the --documentroot-suffix parameter to custom the virtualhost prefix."
                 raise ArgumentsNotValid(exceptionMessage)
     return True
     
