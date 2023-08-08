@@ -58,13 +58,7 @@ class ApacheNewVhost:
         fileOperations.insert_line_in_file(
             file_path=file_to_alter,
             inserting_line_number=inserting_line_number + 1, 
-            line_content="RUN a2ensite " + file_name + ".conf"
-        )
-
-        fileOperations.insert_line_in_file(
-            file_path=file_to_alter,
-            inserting_line_number=inserting_line_number + 1, 
-            line_content="service apache2 reload"
+            line_content="RUN a2ensite " + file_name
         )
 
         fileOperations.append_to_file(
