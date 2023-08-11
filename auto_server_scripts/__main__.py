@@ -48,9 +48,10 @@ def main():
         if args.documentroot_suffix:
             instantiatedClass.setDocumentRootSuffix(args.documentroot_suffix)
         virtualHostFileContent = instantiatedClass.exec()
-        file_name = args.server_name + ".conf"
+
         fileOperations = FileOperations()
         if args.generate_file:
+            file_name = args.server_name + ".conf"
             full_file_path = ""
             if args.to_directory:
                 full_file_path = os.path.join(args.to_directory, file_name)
